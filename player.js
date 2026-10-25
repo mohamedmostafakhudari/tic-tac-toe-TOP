@@ -1,6 +1,11 @@
-export default function createPlayer(mark, name = "Computer") {
-	let name = name;
-	let mark = mark;
+import { MARKS } from "./gameConfig.js";
+
+export default function createPlayer(name, mark) {
+	if (!mark || ![MARKS.X, MARKS.O].includes(mark)) {
+		throw new Error("Invalid 'mark' parameter");
+	}
+
+	const isComputer = name === "Computer";
 
 	function getMark() {
 		return mark;
@@ -10,13 +15,5 @@ export default function createPlayer(mark, name = "Computer") {
 		return name;
 	}
 
-	function setMark(newMark) {
-		if (!newMark || ["x", "o"].includes(newMark)) {
-			throw new Error("Invalid 'newMark' parameter");
-		}
-
-		mark = newMark;
-	}
-
-	return { getMark, getName, setMark };
+	return { isComputer, getMark, getName };
 }

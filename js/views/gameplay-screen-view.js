@@ -54,6 +54,19 @@ export class GameplayScreenView {
 		tieCount.textContent = scores.ties;
 		playerOWinCount.textContent = scores.playerOScore;
 
+		const playerXScoreLabel = fragment.querySelector("#player-x-score-label");
+		const playerOScoreLabel = fragment.querySelector("#player-o-score-label");
+		playerXScoreLabel.textContent = `x (${
+			gameMode === GAME_MODES.AI && !playerWithXMark.isComputer
+				? "you"
+				: playerWithXMark.name
+		})`;
+		playerOScoreLabel.textContent = `o (${
+			gameMode === GAME_MODES.AI && !playerWithOMark.isComputer
+				? "you"
+				: playerWithOMark.name
+		})`;
+
 		this.container.appendChild(fragment);
 	}
 }

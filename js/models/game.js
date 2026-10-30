@@ -1,15 +1,17 @@
 import createGameBoard from "./gameboard.js";
-import { EMPTY, MARKS } from "../gameConfig.js";
+import { EMPTY, MARKS, GAME_MODES } from "../gameConfig.js";
 import { getWinner, isDraw } from "../winner.js";
 import createScore from "./score.js";
 
 export default function createGame(playerOne, playerTwo) {
 	const gameboard = createGameBoard();
 	const score = createScore();
+	const gameMode = playerTwo.isComputer ? GAME_MODES.AI : GAME_MODES.PVP;
 	let errorMessage = "";
 	let winner = null;
 	let winningCells = [];
 	let draw = false;
+
 	let gameCount = 0;
 
 	let currentPlayer = playerOne.getMark() === MARKS.X ? playerOne : playerTwo;
@@ -72,19 +74,35 @@ export default function createGame(playerOne, playerTwo) {
 		}
 	}
 
-	// function getPlayerWithXMark() {
-	// 	if (playerOne === MARKS.X) {
-	// 		return playerOne;
-	// 	}
-	// 	return playerTwo;
-	// }
+	function getPlayerWithXMark() {
+		if (playerOne.getMark() === MARKS.X) {
+			return {
+				name: playerOne.getName(),
+				mark: playerOne.getMark(),
+				isComputer: playerOne.isComputer,
+			};
+		}
+		return {
+			name: playerTwo.getName(),
+			mark: playerTwo.getMark(),
+			isComputer: playerTwo.isComputer,
+		};
+	}
 
-	// function getPlayerWithOMark() {
-	// 	if (playerOne === MARKS.O) {
-	// 		return playerOne;
-	// 	}
-	// 	return playerTwo;
-	// }
+	function getPlayerWithOMark() {
+		if (playerOne.getMark() === MARKS.O) {
+			return {
+				name: playerOne.getName(),
+				mark: playerOne.getMark(),
+				isComputer: playerOne.isComputer,
+			};
+		}
+		return {
+			name: playerTwo.getName(),
+			mark: playerTwo.getMark(),
+			isComputer: playerTwo.isComputer,
+		};
+	}
 
 	function playTurn(position) {
 		// One turn by whoever is the current player
@@ -115,7 +133,14 @@ export default function createGame(playerOne, playerTwo) {
 
 	function getState() {
 		return {
+			gameMode,
+			winningCells,
+			draw,
+			error: errorMessage,
 			board: gameboard.getBoard(),
+			scores: score.getScores(),
+			playerWithXMark: getPlayerWithXMark(),
+			playerWithOMark: getPlayerWithOMark(),
 			currentPlayer: currentPlayer && {
 				name: currentPlayer.getName(),
 				mark: currentPlayer.getMark(),
@@ -124,10 +149,6 @@ export default function createGame(playerOne, playerTwo) {
 				name: winner.getName(),
 				mark: winner.getMark(),
 			},
-			winningCells,
-			draw,
-			scores: score.getScores(),
-			error: errorMessage,
 		};
 	}
 

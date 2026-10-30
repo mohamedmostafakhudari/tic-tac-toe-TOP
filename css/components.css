@@ -1,11 +1,12 @@
-/* ==========================================================================
+@layer components {
+	/* ==========================================================================
    Components
    Every component is wrapped in @scope so its rules can't leak.
    Variants are custom properties (--btn-bg, --badge-bg, --cell-bg …) that the
    base rule consumes, which keeps variant rules to one or two lines.
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
+	/* --------------------------------------------------------------------------
    Marks (X and O)
    The HTML holds a plain "x" / "o" letter. The shapes are drawn with CSS and
    the letter is hidden visually (font-size: 0) but stays in the accessibility
@@ -14,180 +15,180 @@
    Size comes from --mark-size (ancestor, or the .mark-small / .mark-large
    modifiers). Never use `em` in a size token: the mark's own font-size is 0.
    -------------------------------------------------------------------------- */
-@scope (.x-mark, .o-mark) {
-	:scope {
-		--_size: var(--mark-size, 2.25rem);
+	@scope (.x-mark, .o-mark) {
+		:scope {
+			--_size: var(--mark-size, 2.25rem);
 
-		position: relative;
-		display: block;
-		flex: none;
-		inline-size: var(--_size);
-		aspect-ratio: 1;
-		font-size: 0;
-		line-height: 0;
+			position: relative;
+			display: block;
+			flex: none;
+			inline-size: var(--_size);
+			aspect-ratio: 1;
+			font-size: 0;
+			line-height: 0;
+		}
+
+		/* `display: block` above would otherwise beat the [hidden] attribute */
+		:scope[hidden] {
+			display: none;
+		}
+
+		:scope.mark-small {
+			--mark-size: 1.25rem;
+		}
+
+		/* Fills ~42% of the cell it sits in (cells are size containers) */
+		:scope.mark-large {
+			--mark-size: 42cqi;
+		}
 	}
 
-	/* `display: block` above would otherwise beat the [hidden] attribute */
-	:scope[hidden] {
-		display: none;
+	@scope (.x-mark) {
+		:scope {
+			color: var(--mark-color, var(--color-primary));
+		}
+
+		/* Two rounded bars crossed at ±45° */
+		:scope::before,
+		:scope::after {
+			content: "";
+			position: absolute;
+			inset-block: -7%;
+			inset-inline: 37%;
+			border-radius: calc(var(--_size) * 0.07);
+			background: currentColor;
+		}
+
+		:scope::before {
+			rotate: 45deg;
+		}
+
+		:scope::after {
+			rotate: -45deg;
+		}
 	}
 
-	:scope.mark-small {
-		--mark-size: 1.25rem;
+	@scope (.o-mark) {
+		:scope {
+			color: var(--mark-color, var(--color-secondary));
+			border: calc(var(--_size) * 0.21) solid currentColor;
+			border-radius: 50%;
+		}
 	}
 
-	/* Fills ~42% of the cell it sits in (cells are size containers) */
-	:scope.mark-large {
-		--mark-size: 42cqi;
-	}
-}
-
-@scope (.x-mark) {
-	:scope {
-		color: var(--mark-color, var(--color-primary));
-	}
-
-	/* Two rounded bars crossed at ±45° */
-	:scope::before,
-	:scope::after {
-		content: "";
-		position: absolute;
-		inset-block: -7%;
-		inset-inline: 37%;
-		border-radius: calc(var(--_size) * 0.07);
-		background: currentColor;
-	}
-
-	:scope::before {
-		rotate: 45deg;
-	}
-
-	:scope::after {
-		rotate: -45deg;
-	}
-}
-
-@scope (.o-mark) {
-	:scope {
-		color: var(--mark-color, var(--color-secondary));
-		border: calc(var(--_size) * 0.21) solid currentColor;
-		border-radius: 50%;
-	}
-}
-
-/* --------------------------------------------------------------------------
+	/* --------------------------------------------------------------------------
    Logo (setup screen + gameplay header)
    -------------------------------------------------------------------------- */
-@scope (.logo) {
-	:scope {
-		display: flex;
-		justify-content: center;
-		gap: var(--space-2);
+	@scope (.logo) {
+		:scope {
+			display: flex;
+			justify-content: center;
+			gap: var(--space-2);
+		}
 	}
-}
 
-/* --------------------------------------------------------------------------
+	/* --------------------------------------------------------------------------
    Button
    Also applied to the dialog's unclassed Quit button, so it behaves like a
    .btn without needing a class in the HTML.
    Silver is the default; .btn-primary (teal) and .btn-secondary (yellow)
    are variants.
    -------------------------------------------------------------------------- */
-@scope (.btn, .game-result-dialog button[command="close"]) {
-	:scope {
-		--btn-bg: var(--color-silver);
-		--btn-bg-hover: var(--color-silver-hover);
-		--btn-shade: var(--color-silver-shade);
-		--btn-depth: 0.5rem;
+	@scope (.btn, .game-result-dialog button[command="close"]) {
+		:scope {
+			--btn-bg: var(--color-silver);
+			--btn-bg-hover: var(--color-silver-hover);
+			--btn-shade: var(--color-silver-shade);
+			--btn-depth: 0.5rem;
 
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		/* extra bottom padding so the text sits centred on the lit face */
-		padding: var(--space-4) var(--space-5)
-			calc(var(--space-4) + var(--btn-depth));
-		border: 0;
-		border-radius: var(--radius-2xl);
-		background-color: var(--btn-bg);
-		box-shadow: inset 0 calc(var(--btn-depth) * -1) 0 var(--btn-shade);
-		color: var(--color-on-primary);
-		font-size: var(--font-size-lg);
-		font-weight: 700;
-		letter-spacing: 0.05em;
-		line-height: var(--leading-tight);
-		text-transform: uppercase;
-		cursor: pointer;
-	}
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			/* extra bottom padding so the text sits centred on the lit face */
+			padding: var(--space-4) var(--space-5)
+				calc(var(--space-4) + var(--btn-depth));
+			border: 0;
+			border-radius: var(--radius-2xl);
+			background-color: var(--btn-bg);
+			box-shadow: inset 0 calc(var(--btn-depth) * -1) 0 var(--btn-shade);
+			color: var(--color-on-primary);
+			font-size: var(--font-size-lg);
+			font-weight: 700;
+			letter-spacing: 0.05em;
+			line-height: var(--leading-tight);
+			text-transform: uppercase;
+			cursor: pointer;
+		}
 
-	:scope.btn-primary {
-		--btn-bg: var(--color-primary);
-		--btn-bg-hover: var(--color-primary-hover);
-		--btn-shade: var(--color-primary-shade);
-	}
+		:scope.btn-primary {
+			--btn-bg: var(--color-primary);
+			--btn-bg-hover: var(--color-primary-hover);
+			--btn-shade: var(--color-primary-shade);
+		}
 
-	:scope.btn-secondary {
-		--btn-bg: var(--color-secondary);
-		--btn-bg-hover: var(--color-secondary-hover);
-		--btn-shade: var(--color-secondary-shade);
-	}
+		:scope.btn-secondary {
+			--btn-bg: var(--color-secondary);
+			--btn-bg-hover: var(--color-secondary-hover);
+			--btn-shade: var(--color-secondary-shade);
+		}
 
-	@media (hover: hover) {
-		:scope:hover:not(:disabled) {
-			background-color: var(--btn-bg-hover);
+		@media (hover: hover) {
+			:scope:hover:not(:disabled) {
+				background-color: var(--btn-bg-hover);
+			}
+		}
+
+		:scope:focus-visible {
+			outline: 3px solid var(--color-focus-outline);
+			outline-offset: 3px;
+		}
+
+		:scope:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
 		}
 	}
 
-	:scope:focus-visible {
-		outline: 3px solid var(--color-focus-outline);
-		outline-offset: 3px;
-	}
-
-	:scope:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-}
-
-/* --------------------------------------------------------------------------
+	/* --------------------------------------------------------------------------
    Badge (scoreboard)
    Default is silver (ties). .badge-primary = teal, .badge-secondary = yellow.
    -------------------------------------------------------------------------- */
-@scope (.badge) {
-	:scope {
-		--badge-bg: var(--color-silver);
+	@scope (.badge) {
+		:scope {
+			--badge-bg: var(--color-silver);
 
-		display: grid;
-		justify-items: center;
-		padding: var(--space-3) var(--space-2);
-		border-radius: var(--radius-xl);
-		background-color: var(--badge-bg);
-		color: var(--color-on-primary);
-		text-align: center;
+			display: grid;
+			justify-items: center;
+			padding: var(--space-3) var(--space-2);
+			border-radius: var(--radius-xl);
+			background-color: var(--badge-bg);
+			color: var(--color-on-primary);
+			text-align: center;
+		}
+
+		:scope.badge-primary {
+			--badge-bg: var(--color-primary);
+		}
+
+		:scope.badge-secondary {
+			--badge-bg: var(--color-secondary);
+		}
+
+		.label {
+			font-size: var(--font-size-sm);
+			font-weight: 500;
+			letter-spacing: 0.05em;
+			text-transform: uppercase;
+		}
+
+		.score {
+			font-size: var(--font-size-xl);
+			font-weight: 700;
+			line-height: var(--leading-tight);
+		}
 	}
 
-	:scope.badge-primary {
-		--badge-bg: var(--color-primary);
-	}
-
-	:scope.badge-secondary {
-		--badge-bg: var(--color-secondary);
-	}
-
-	.label {
-		font-size: var(--font-size-sm);
-		font-weight: 500;
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
-	}
-
-	.score {
-		font-size: var(--font-size-xl);
-		font-weight: 700;
-		line-height: var(--leading-tight);
-	}
-}
-
-/* --------------------------------------------------------------------------
+	/* --------------------------------------------------------------------------
    Board cell
    The cell is a size container so the mark can be sized in cqi (42cqi), which
    keeps marks proportional to the cell at every viewport width.
@@ -195,273 +196,274 @@
    Keyboard focus needs tabindex on the cell (HTML/JS); the focus style is
    ready for it.
    -------------------------------------------------------------------------- */
-@scope (.cell) {
-	:scope {
-		--cell-bg: var(--color-surface);
-		--cell-shade: var(--color-surface-shade);
-		--cell-depth: 0.5rem;
+	@scope (.cell) {
+		:scope {
+			--cell-bg: var(--color-surface);
+			--cell-shade: var(--color-surface-shade);
+			--cell-depth: 0.5rem;
 
-		container-type: inline-size;
-		display: grid;
-		place-items: center;
-		aspect-ratio: 1;
-		/* keep the mark centred on the lit face, not on face + shade */
-		padding-block-end: var(--cell-depth);
-		border-radius: var(--radius-xl);
-		background-color: var(--cell-bg);
-		box-shadow: inset 0 calc(var(--cell-depth) * -1) 0 var(--cell-shade);
-		cursor: pointer;
-	}
+			container-type: inline-size;
+			display: grid;
+			place-items: center;
+			aspect-ratio: 1;
+			/* keep the mark centred on the lit face, not on face + shade */
+			padding-block-end: var(--cell-depth);
+			border-radius: var(--radius-xl);
+			background-color: var(--cell-bg);
+			box-shadow: inset 0 calc(var(--cell-depth) * -1) 0 var(--cell-shade);
+			cursor: pointer;
+		}
 
-	/* Empty cells only */
-	@media (hover: hover) {
-		:scope:not(:has(.x-mark:not([hidden]), .o-mark:not([hidden]))):hover {
-			--cell-bg: var(--color-surface-hover);
+		/* Empty cells only */
+		@media (hover: hover) {
+			:scope:not(:has(.x-mark:not([hidden]), .o-mark:not([hidden]))):hover {
+				--cell-bg: var(--color-surface-hover);
+			}
+		}
+
+		:scope:focus-visible {
+			outline: 3px solid var(--color-focus-outline);
+			outline-offset: 3px;
+		}
+
+		/* Winning cells: X = teal, O = yellow, mark turns dark */
+		:scope.win-cell:has(.x-mark:not([hidden])) {
+			--cell-bg: var(--color-primary);
+			--cell-shade: var(--color-primary-shade);
+			--mark-color: var(--color-on-primary);
+		}
+
+		:scope.win-cell:has(.o-mark:not([hidden])) {
+			--cell-bg: var(--color-secondary);
+			--cell-shade: var(--color-secondary-shade);
+			--mark-color: var(--color-on-secondary);
 		}
 	}
 
-	:scope:focus-visible {
-		outline: 3px solid var(--color-focus-outline);
-		outline-offset: 3px;
-	}
-
-	/* Winning cells: X = teal, O = yellow, mark turns dark */
-	:scope.win-cell:has(.x-mark:not([hidden])) {
-		--cell-bg: var(--color-primary);
-		--cell-shade: var(--color-primary-shade);
-		--mark-color: var(--color-on-primary);
-	}
-
-	:scope.win-cell:has(.o-mark:not([hidden])) {
-		--cell-bg: var(--color-secondary);
-		--cell-shade: var(--color-secondary-shade);
-		--mark-color: var(--color-on-secondary);
-	}
-}
-
-/* --------------------------------------------------------------------------
+	/* --------------------------------------------------------------------------
    Setup: "pick player 1's mark" card
    The radios are visually hidden but stay focusable and clickable; the label
    is the visible option. :has() reads the radio state to style the label.
    -------------------------------------------------------------------------- */
-@scope (.pick-mark) {
-	:scope {
-		display: grid;
-		gap: var(--space-6);
-		padding: var(--space-6) var(--space-6) calc(var(--space-6) + 0.5rem);
-		border-radius: var(--radius-2xl);
-		background-color: var(--color-surface);
-		box-shadow: inset 0 -0.5rem 0 var(--color-surface-shade);
-		text-align: center;
-	}
+	@scope (.pick-mark) {
+		:scope {
+			display: grid;
+			gap: var(--space-6);
+			padding: var(--space-6) var(--space-6) calc(var(--space-6) + 0.5rem);
+			border-radius: var(--radius-2xl);
+			background-color: var(--color-surface);
+			box-shadow: inset 0 -0.5rem 0 var(--color-surface-shade);
+			text-align: center;
+		}
 
-	/* `>` keeps specificity above the global h2 rules */
-	:scope > h2 {
-		color: var(--color-silver);
-		font-size: var(--font-size-base);
-		font-weight: 700;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-	}
+		/* `>` keeps specificity above the global h2 rules */
+		:scope > h2 {
+			color: var(--color-silver);
+			font-size: var(--font-size-base);
+			font-weight: 700;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+		}
 
-	:scope > p {
-		color: var(--color-text-subtle);
-		font-size: var(--font-size-sm);
-		font-weight: 500;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-	}
+		:scope > p {
+			color: var(--color-text-subtle);
+			font-size: var(--font-size-sm);
+			font-weight: 500;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+		}
 
-	/* The track that holds the two options */
-	:scope > div {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: var(--space-2);
-		padding: var(--space-2);
-		border-radius: var(--radius-xl);
-		background-color: var(--color-background);
-	}
+		/* The track that holds the two options */
+		:scope > div {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: var(--space-2);
+			padding: var(--space-2);
+			border-radius: var(--radius-xl);
+			background-color: var(--color-background);
+		}
 
-	label {
-		--mark-color: var(--color-silver);
+		label {
+			--mark-color: var(--color-silver);
 
-		position: relative;
-		display: grid;
-		place-items: center;
-		padding-block: 0.9rem;
-		border-radius: var(--radius-lg);
-		cursor: pointer;
-	}
+			position: relative;
+			display: grid;
+			place-items: center;
+			padding-block: 0.9rem;
+			border-radius: var(--radius-lg);
+			cursor: pointer;
+		}
 
-	label:has(input:checked) {
-		--mark-color: var(--color-background);
+		label:has(input:checked) {
+			--mark-color: var(--color-background);
 
-		background-color: var(--color-silver);
-	}
+			background-color: var(--color-silver);
+		}
 
-	label:has(input:focus-visible) {
-		outline: 3px solid var(--color-focus-outline);
-		outline-offset: 2px;
-	}
+		label:has(input:focus-visible) {
+			outline: 3px solid var(--color-focus-outline);
+			outline-offset: 2px;
+		}
 
-	@media (hover: hover) {
-		label:not(:has(input:checked)):hover {
-			background-color: color-mix(
-				in srgb,
-				var(--color-silver) 5%,
-				transparent
-			);
+		@media (hover: hover) {
+			label:not(:has(input:checked)):hover {
+				background-color: color-mix(
+					in srgb,
+					var(--color-silver) 5%,
+					transparent
+				);
+			}
+		}
+
+		/* Invisible but real: covers the label so clicks and focus still work.
+	   opacity: 0 also hides the global input border/shadow/focus styles. */
+		.mark-option {
+			position: absolute;
+			inset: 0;
+			inline-size: 100%;
+			block-size: 100%;
+			margin: 0;
+			appearance: none;
+			opacity: 0;
+			cursor: pointer;
 		}
 	}
 
-	/* Invisible but real: covers the label so clicks and focus still work.
-	   opacity: 0 also hides the global input border/shadow/focus styles. */
-	.mark-option {
-		position: absolute;
-		inset: 0;
-		inline-size: 100%;
-		block-size: 100%;
-		margin: 0;
-		appearance: none;
-		opacity: 0;
-		cursor: pointer;
-	}
-}
-
-/* --------------------------------------------------------------------------
+	/* --------------------------------------------------------------------------
    Gameplay header: turn indicator
    -------------------------------------------------------------------------- */
-@scope (.current-turn-display) {
-	:scope {
-		--mark-color: var(--color-silver);
+	@scope (.current-turn-display) {
+		:scope {
+			--mark-color: var(--color-silver);
 
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: var(--space-2);
-		padding: var(--space-2) var(--space-4) calc(var(--space-2) + 0.25rem);
-		border-radius: var(--radius-md);
-		background-color: var(--color-surface);
-		box-shadow: inset 0 -0.25rem 0 var(--color-surface-shade);
-		color: var(--color-silver);
-		font-weight: 700;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-	}
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: var(--space-2);
+			padding: var(--space-2) var(--space-4) calc(var(--space-2) + 0.25rem);
+			border-radius: var(--radius-md);
+			background-color: var(--color-surface);
+			box-shadow: inset 0 -0.25rem 0 var(--color-surface-shade);
+			color: var(--color-silver);
+			font-weight: 700;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+		}
 
-	/* Holds the X and O marks; only one is visible at a time */
-	.mark {
-		display: grid;
-	}
-}
-
-/* --------------------------------------------------------------------------
-   Gameplay header: restart button
-   -------------------------------------------------------------------------- */
-@scope (.restart-btn) {
-	:scope {
-		display: grid;
-		place-items: center;
-		inline-size: 2.75rem;
-		block-size: 2.75rem;
-		padding: 0 0 0.25rem;
-		border: 0;
-		border-radius: var(--radius-md);
-		background-color: var(--color-silver);
-		box-shadow: inset 0 -0.25rem 0 var(--color-silver-shade);
-		color: var(--color-on-primary);
-		cursor: pointer;
-	}
-
-	@media (hover: hover) {
-		:scope:hover {
-			background-color: var(--color-silver-hover);
+		/* Holds the X and O marks; only one is visible at a time */
+		.mark {
+			display: grid;
 		}
 	}
 
-	:scope:focus-visible {
-		outline: 3px solid var(--color-focus-outline);
-		outline-offset: 3px;
+	/* --------------------------------------------------------------------------
+   Gameplay header: restart button
+   -------------------------------------------------------------------------- */
+	@scope (.restart-btn) {
+		:scope {
+			display: grid;
+			place-items: center;
+			inline-size: 2.75rem;
+			block-size: 2.75rem;
+			padding: 0 0 0.25rem;
+			border: 0;
+			border-radius: var(--radius-md);
+			background-color: var(--color-silver);
+			box-shadow: inset 0 -0.25rem 0 var(--color-silver-shade);
+			color: var(--color-on-primary);
+			cursor: pointer;
+		}
+
+		@media (hover: hover) {
+			:scope:hover {
+				background-color: var(--color-silver-hover);
+			}
+		}
+
+		:scope:focus-visible {
+			outline: 3px solid var(--color-focus-outline);
+			outline-offset: 3px;
+		}
+
+		.icon {
+			inline-size: 1.5rem;
+			block-size: 1.5rem;
+			fill: currentColor;
+		}
 	}
 
-	.icon {
-		inline-size: 1.5rem;
-		block-size: 1.5rem;
-		fill: currentColor;
-	}
-}
-
-/* --------------------------------------------------------------------------
+	/* --------------------------------------------------------------------------
    Result dialog (opened with showModal())
    A full-width band across the middle of the screen over a dimmed page.
    `display` is only set on [open]; setting it on the dialog itself would
    keep it visible when closed.
    -------------------------------------------------------------------------- */
-@scope (.game-result-dialog) {
-	:scope {
-		inline-size: 100%;
-		max-inline-size: none;
-		padding: var(--space-8) var(--space-6);
-		border: 0;
-		background-color: var(--color-surface);
-		color: var(--color-text-main);
-		text-align: center;
-	}
+	@scope (.game-result-dialog) {
+		:scope {
+			inline-size: 100%;
+			max-inline-size: none;
+			padding: var(--space-8) var(--space-6);
+			border: 0;
+			background-color: var(--color-surface);
+			color: var(--color-text-main);
+			text-align: center;
+		}
 
-	:scope[open] {
-		display: grid;
-		justify-items: center;
-		gap: var(--space-4);
-	}
+		:scope[open] {
+			display: grid;
+			justify-items: center;
+			gap: var(--space-4);
+		}
 
-	.dialog-head {
-		font-size: var(--font-size-base);
-		font-weight: 700;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-	}
+		.dialog-head {
+			font-size: var(--font-size-base);
+			font-weight: 700;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+		}
 
-	.dialog-body {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: center;
-		gap: var(--space-6) var(--space-4);
-	}
+		.dialog-body {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: center;
+			gap: var(--space-6) var(--space-4);
+		}
 
-	/* Own row; tied rounds (no visible mark) stay silver */
-	.declare-winner {
-		--mark-size: 1.75rem;
+		/* Own row; tied rounds (no visible mark) stay silver */
+		.declare-winner {
+			--mark-size: 1.75rem;
 
-		display: flex;
-		flex-basis: 100%;
-		align-items: center;
-		justify-content: center;
-		gap: var(--space-3);
-		color: var(--color-silver);
-		font-size: var(--font-size-2xl);
-		font-weight: 700;
-		letter-spacing: 0.06em;
-		line-height: var(--leading-tight);
-		text-transform: uppercase;
-	}
+			display: flex;
+			flex-basis: 100%;
+			align-items: center;
+			justify-content: center;
+			gap: var(--space-3);
+			color: var(--color-silver);
+			font-size: var(--font-size-2xl);
+			font-weight: 700;
+			letter-spacing: 0.06em;
+			line-height: var(--leading-tight);
+			text-transform: uppercase;
+		}
 
-	.declare-winner:has(.x-mark:not([hidden])) {
-		color: var(--color-primary);
-	}
+		.declare-winner:has(.x-mark:not([hidden])) {
+			color: var(--color-primary);
+		}
 
-	.declare-winner:has(.o-mark:not([hidden])) {
-		color: var(--color-secondary);
-	}
+		.declare-winner:has(.o-mark:not([hidden])) {
+			color: var(--color-secondary);
+		}
 
-	/* Lets the marks be flex items directly, so a fully hidden wrapper
+		/* Lets the marks be flex items directly, so a fully hidden wrapper
 	   (a tie) doesn't leave an empty gap */
-	.mark-wrapper {
-		display: contents;
+		.mark-wrapper {
+			display: contents;
+		}
 	}
-}
 
-/* ::backdrop doesn't reliably inherit custom properties, so use literals */
-.game-result-dialog::backdrop {
-	background-color: rgb(0 0 0 / 0.5);
+	/* ::backdrop doesn't reliably inherit custom properties, so use literals */
+	.game-result-dialog::backdrop {
+		background-color: rgb(0 0 0 / 0.5);
+	}
 }

@@ -1,9 +1,11 @@
 import createGameBoard from "./gameboard.js";
 import { EMPTY, MARKS } from "../gameConfig.js";
 import { getWinner, isDraw } from "../winner.js";
+import createScore from "./score.js";
 
 export default function createGame(playerOne, playerTwo) {
 	const gameboard = createGameBoard();
+	const score = createScore();
 	let errorMessage = "";
 	let winner = null;
 	let draw = false;
@@ -59,6 +61,30 @@ export default function createGame(playerOne, playerTwo) {
 		return winner !== null || draw;
 	}
 
+	function updateScores() {
+		if (winner) {
+			winner.getMark() === MARKS.X
+				? score.incrementPlayerXScore()
+				: score.incrementPlayerOScore();
+		} else if (draw) {
+			score.incrementTies();
+		}
+	}
+
+	// function getPlayerWithXMark() {
+	// 	if (playerOne === MARKS.X) {
+	// 		return playerOne;
+	// 	}
+	// 	return playerTwo;
+	// }
+
+	// function getPlayerWithOMark() {
+	// 	if (playerOne === MARKS.O) {
+	// 		return playerOne;
+	// 	}
+	// 	return playerTwo;
+	// }
+
 	function playTurn(position) {
 		// One turn by whoever is the current player
 		if (isOver()) {
@@ -75,8 +101,10 @@ export default function createGame(playerOne, playerTwo) {
 		const result = checkResult();
 		if (result.winner) {
 			winner = currentPlayer;
+			updateScores();
 		} else if (result.draw) {
 			draw = true;
+			updateScores();
 		} else {
 			switchPlayerTurn();
 		}
@@ -86,11 +114,20 @@ export default function createGame(playerOne, playerTwo) {
 	function getState() {
 		return {
 			board: gameboard.getBoard(),
+			currentPlayer: currentPlayer && {
+				name: currentPlayer.getName(),
+				mark: currentPlayer.getMark(),
+			},
 			winner: winner && {
 				name: winner.getName(),
 				mark: winner.getMark(),
 			},
 			draw,
+			scores: {
+				playerXScore: score.playerXScore,
+				playerOScore: score.playerOScore,
+				ties: score.ties,
+			},
 			error: errorMessage,
 		};
 	}

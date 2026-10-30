@@ -31,11 +31,17 @@ class GameController {
 		const state = this.game.startANewGame();
 
 		this.gameplayScreenView.bindPlaceMark(this.handlePlaceMark.bind(this));
+		this.gameplayScreenView.bindNextRound(this.handleNextRound.bind(this));
 		this.gameplayScreenView.render(state);
 	}
 
 	handlePlaceMark(position) {
 		const state = this.game.play(position);
+		this.gameplayScreenView.render(state);
+	}
+
+	handleNextRound() {
+		const state = this.game.nextRound();
 		this.gameplayScreenView.render(state);
 	}
 

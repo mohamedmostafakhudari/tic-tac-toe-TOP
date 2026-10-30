@@ -49,9 +49,12 @@ export default function createGame(playerOne, playerTwo) {
 
 	function resetState() {
 		gameboard.resetBoard();
-		winner = null;
-		draw = false;
+		score.reset();
 		errorMessage = "";
+		winner = null;
+		winningCells = [];
+		draw = false;
+		gameCount = 0;
 	}
 
 	function checkResult() {
@@ -144,21 +147,30 @@ export default function createGame(playerOne, playerTwo) {
 			currentPlayer: currentPlayer && {
 				name: currentPlayer.getName(),
 				mark: currentPlayer.getMark(),
+				isComputer: currentPlayer.isComputer,
 			},
 			winner: winner && {
 				name: winner.getName(),
 				mark: winner.getMark(),
+				isComputer: winner.isComputer,
 			},
 		};
 	}
 
+	function nextRound() {
+		gameboard.resetBoard();
+		errorMessage = "";
+		winner = null;
+		winningCells = [];
+		draw = false;
+
+		incrementGameCount();
+		swapMarks();
+
+		return getState();
+	}
 	function startANewGame() {
 		resetState();
-		incrementGameCount();
-
-		if (gameCount > 1) {
-			swapMarks();
-		}
 
 		// it's always the player with mark X that got to start the game
 		currentPlayer = playerOne.getMark() === MARKS.X ? playerOne : playerTwo;
@@ -183,5 +195,5 @@ export default function createGame(playerOne, playerTwo) {
 		return getState();
 	}
 
-	return { getState, play, startANewGame };
+	return { getState, play, startANewGame, nextRound };
 }

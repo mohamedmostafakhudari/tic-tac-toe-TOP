@@ -1,7 +1,9 @@
+import { GAME_MODES, MARKS } from "../gameConfig.js";
 export class GameplayScreenView {
 	constructor(containerElement, template) {
 		this.container = containerElement;
 		this.template = template;
+		this.gameResultDialog = null;
 		this.abortController = new AbortController();
 	}
 
@@ -17,6 +19,17 @@ export class GameplayScreenView {
 		);
 	}
 
+	bindNextRound(callback) {
+		this.container.addEventListener(
+			"click",
+			(e) => {
+				const nextBtn = e.target.closest(".btn-next");
+				if (!nextBtn || !this.container.contains(nextBtn)) return;
+				callback();
+			},
+			{ signal: this.abortController.signal },
+		);
+	}
 	destroy() {
 		this.abortController.abort(); // removes every listener, any event type
 		this.container.innerHTML = "";
@@ -26,7 +39,18 @@ export class GameplayScreenView {
 		const fragment = this.template.content.cloneNode(true);
 		this.container.innerHTML = "";
 
-		const { board, currentPlayer, winner, draw, scores, error } = data;
+		const {
+			gameMode,
+			board,
+			playerWithXMark,
+			playerWithOMark,
+			currentPlayer,
+			winner,
+			winningCells,
+			draw,
+			scores,
+			error,
+		} = data;
 
 		const currentTurnDisplay = fragment.querySelector("#current-turn-display");
 		currentTurnDisplay.querySelector(".mark > .x-mark").hidden =
@@ -68,5 +92,33 @@ export class GameplayScreenView {
 		})`;
 
 		this.container.appendChild(fragment);
+
+		this.gameResultDialog = document.querySelector("#game-result-dialog");
+
+		if (winner || draw) {
+			const dialogHead = this.gameResultDialog.querySelector(".dialog-head");
+			const declareWinner =
+				this.gameResultDialog.querySelector(".declare-winner");
+
+			if (winner) {
+				dialogHead.textContent =
+					GAME_MODES.AI && winner.isComputer
+						? "you lost!"
+						: GAME_MODES.AI && !winner.isComputer
+							? "you won!"
+							: `${winner.name} won!`;
+				declareWinner.querySelector(".x-mark").hidden =
+					winner.mark !== MARKS.X;
+				declareWinner.querySelector(".o-mark").hidden =
+					winner.mark !== MARKS.O;
+			}
+
+			if (draw) {
+				dialogHead.textContent = "it's a tie!";
+				declareWinner.hidden = true;
+			}
+
+			this.gameResultDialog.showModal();
+		}
 	}
 }

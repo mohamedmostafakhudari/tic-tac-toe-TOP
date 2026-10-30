@@ -22,7 +22,7 @@ class GameController {
 
 		const playerOne = createPlayer("Player One", playerOneMark);
 		const playerTwo = createPlayer(
-			"ai",
+			mode === "ai" ? "ai" : "Player Two",
 			playerOneMark === MARKS.X ? MARKS.O : MARKS.X,
 			mode === "ai",
 		);

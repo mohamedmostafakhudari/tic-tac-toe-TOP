@@ -21,5 +21,13 @@ export default function createPlayer(name, mark, isComputer = false) {
 		return name;
 	}
 
-	return { isComputer, getMark, getName, setMark };
+	function getState() {
+		return {
+			name: name,
+			mark: mark,
+			isComputer: isComputer,
+		};
+	}
+
+	return { isComputer, getMark, getName, setMark, getState };
 }

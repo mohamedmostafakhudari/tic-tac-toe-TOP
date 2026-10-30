@@ -1,24 +1,32 @@
 export default function createScore() {
-	let playerXScore = 0;
-	let playerOScore = 0;
+	let playerOneScore = 0;
+	let playerTwoScore = 0;
 	let ties = 0;
 
 	function reset() {
-		playerXScore = 0;
-		playerOScore = 0;
+		playerOneScore = 0;
+		playerTwoScore = 0;
 		ties = 0;
 	}
 
-	function getScores() {
-		return { playerXScore, playerOScore, ties };
+	function getPlayerOneScore() {
+		return playerOneScore;
 	}
 
-	function incrementPlayerXScore() {
-		playerXScore += 1;
+	function getPlayerTwoScore() {
+		return playerTwoScore;
 	}
 
-	function incrementPlayerOScore() {
-		playerOScore += 1;
+	function getTies() {
+		return ties;
+	}
+
+	function incrementPlayerOneScore() {
+		playerOneScore += 1;
+	}
+
+	function incrementPlayerTwoScore() {
+		playerTwoScore += 1;
 	}
 
 	function incrementTies() {
@@ -26,10 +34,12 @@ export default function createScore() {
 	}
 
 	return {
-		getScores,
+		getPlayerOneScore,
+		getPlayerTwoScore,
+		getTies,
 		reset,
-		incrementPlayerXScore,
-		incrementPlayerOScore,
+		incrementPlayerOneScore,
+		incrementPlayerTwoScore,
 		incrementTies,
 	};
 }

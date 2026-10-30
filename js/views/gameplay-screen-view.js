@@ -51,7 +51,6 @@ export class GameplayScreenView {
 			scores,
 			error,
 		} = data;
-
 		const currentTurnDisplay = fragment.querySelector("#current-turn-display");
 		currentTurnDisplay.querySelector(".mark > .x-mark").hidden =
 			currentPlayer.mark !== "x";

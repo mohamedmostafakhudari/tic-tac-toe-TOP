@@ -69,9 +69,11 @@ export default function createGame(playerOne, playerTwo) {
 
 	function updateScores() {
 		if (winner) {
-			winner.getMark() === MARKS.X
-				? score.incrementPlayerXScore()
-				: score.incrementPlayerOScore();
+			if (playerOne.getMark() === winner.getMark()) {
+				score.incrementPlayerOneScore();
+			} else if (playerTwo.getMark() === winner.getMark()) {
+				score.incrementPlayerTwoScore();
+			}
 		} else if (draw) {
 			score.incrementTies();
 		}
@@ -79,32 +81,16 @@ export default function createGame(playerOne, playerTwo) {
 
 	function getPlayerWithXMark() {
 		if (playerOne.getMark() === MARKS.X) {
-			return {
-				name: playerOne.getName(),
-				mark: playerOne.getMark(),
-				isComputer: playerOne.isComputer,
-			};
+			return playerOne.getState();
 		}
-		return {
-			name: playerTwo.getName(),
-			mark: playerTwo.getMark(),
-			isComputer: playerTwo.isComputer,
-		};
+		return playerTwo.getState();
 	}
 
 	function getPlayerWithOMark() {
 		if (playerOne.getMark() === MARKS.O) {
-			return {
-				name: playerOne.getName(),
-				mark: playerOne.getMark(),
-				isComputer: playerOne.isComputer,
-			};
+			return playerOne.getState();
 		}
-		return {
-			name: playerTwo.getName(),
-			mark: playerTwo.getMark(),
-			isComputer: playerTwo.isComputer,
-		};
+		return playerTwo.getState();
 	}
 
 	function playTurn(position) {
@@ -141,7 +127,17 @@ export default function createGame(playerOne, playerTwo) {
 			draw,
 			error: errorMessage,
 			board: gameboard.getBoard(),
-			scores: score.getScores(),
+			scores: {
+				playerXScore:
+					getPlayerWithXMark().mark === playerOne.getMark()
+						? score.getPlayerOneScore()
+						: score.getPlayerTwoScore(),
+				playerOScore:
+					getPlayerWithOMark().mark === playerOne.getMark()
+						? score.getPlayerOneScore()
+						: score.getPlayerTwoScore(),
+				ties: score.getTies(),
+			},
 			playerWithXMark: getPlayerWithXMark(),
 			playerWithOMark: getPlayerWithOMark(),
 			currentPlayer: currentPlayer && {

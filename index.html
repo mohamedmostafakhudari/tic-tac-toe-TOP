@@ -8,13 +8,410 @@
 		/>
 		<title>Tic Tac Toe</title>
 		<link
+			rel="preconnect"
+			href="https://fonts.googleapis.com"
+		/>
+		<link
+			rel="preconnect"
+			href="https://fonts.gstatic.com"
+			crossorigin
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap"
 			rel="stylesheet"
-			href="style.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="css/reset.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="css/global.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="css/components.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="css/utilities.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="css/style.css"
 		/>
 		<script
 			type="module"
-			src="main.js"
+			src="js/main.js"
 		></script>
 	</head>
-	<body></body>
+	<body>
+		<!-- Icon sprite -->
+		<svg
+			width="0"
+			height="0"
+			style="position: absolute"
+			aria-hidden="true"
+		>
+			<symbol
+				id="i-refresh"
+				viewBox="0 -960 960 960"
+			>
+				<path
+					d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"
+				/>
+			</symbol>
+		</svg>
+		<template id="setup-screen-template">
+			<div
+				class="screen"
+				id="setup-screen"
+			>
+				<main
+					class="game-setup"
+					id="game-setup"
+				>
+					<form
+						id="game-setup-form"
+						class="game-setup-form"
+					>
+						<div class="logo">
+							<div class="x-mark">x</div>
+							<div class="o-mark">o</div>
+						</div>
+						<div class="pick-mark">
+							<h2>pick player 1's mark</h2>
+							<div>
+								<label for="x-mark-selection">
+									<div class="x-mark">x</div>
+									<input
+										type="radio"
+										name="playerOneMark"
+										id="x-mark-selection"
+										class="mark-option"
+										value="x"
+										checked
+									/>
+								</label>
+
+								<label for="o-mark-selection"
+									><div class="o-mark">o</div>
+									<input
+										type="radio"
+										name="playerOneMark"
+										id="o-mark-selection"
+										class="mark-option"
+										value="o"
+									/>
+								</label>
+							</div>
+							<p>remember: x goes first</p>
+						</div>
+						<button
+							class="btn btn-secondary"
+							name="mode"
+							value="ai"
+						>
+							new game (vs AI)
+						</button>
+						<button
+							class="btn btn-primary"
+							name="mode"
+							value="player"
+						>
+							new game (vs player)
+						</button>
+					</form>
+				</main>
+			</div>
+		</template>
+		<template id="gameplay-screen-template">
+			<div
+				class="screen"
+				id="gameplay-screen"
+			>
+				<header>
+					<div class="container">
+						<div class="logo">
+							<div class="x-mark">x</div>
+							<div class="o-mark">o</div>
+						</div>
+						<div
+							id="current-turn-display"
+							class="current-turn-display"
+						>
+							<div class="mark">
+								<div class="x-mark mark-small">x</div>
+
+								<div
+									class="o-mark mark-small"
+									hidden
+								>
+									o
+								</div>
+							</div>
+							turn
+						</div>
+						<button
+							class="restart-btn"
+							id="restart-btn"
+							aria-label="Restart game"
+						>
+							<svg class="icon"><use href="#i-refresh"></use></svg>
+						</button>
+					</div>
+				</header>
+				<main
+					id="game"
+					class="game"
+				>
+					<div
+						id="gameboard"
+						class="gameboard"
+					>
+						<div
+							class="cell"
+							data-cell="0"
+							tabindex="0"
+						>
+							<!-- a mark is going here -->
+							<div
+								class="x-mark mark-large"
+								hidden
+							>
+								x
+							</div>
+							<div
+								class="o-mark mark-large"
+								hidden
+							>
+								o
+							</div>
+						</div>
+						<div
+							class="cell"
+							data-cell="1"
+							tabindex="0"
+						>
+							<!-- a mark is going here -->
+							<div
+								class="x-mark mark-large"
+								hidden
+							>
+								x
+							</div>
+							<div
+								class="o-mark mark-large"
+								hidden
+							>
+								o
+							</div>
+						</div>
+						<div
+							class="cell"
+							data-cell="2"
+							tabindex="0"
+						>
+							<!-- a mark is going here -->
+							<div
+								class="x-mark mark-large"
+								hidden
+							>
+								x
+							</div>
+							<div
+								class="o-mark mark-large"
+								hidden
+							>
+								o
+							</div>
+						</div>
+						<div
+							class="cell"
+							data-cell="3"
+							tabindex="0"
+						>
+							<!-- a mark is going here -->
+							<div
+								class="x-mark mark-large"
+								hidden
+							>
+								x
+							</div>
+							<div
+								class="o-mark mark-large"
+								hidden
+							>
+								o
+							</div>
+						</div>
+						<div
+							class="cell"
+							data-cell="4"
+							tabindex="0"
+						>
+							<!-- a mark is going here -->
+							<div
+								class="x-mark mark-large"
+								hidden
+							>
+								x
+							</div>
+							<div
+								class="o-mark mark-large"
+								hidden
+							>
+								o
+							</div>
+						</div>
+						<div
+							class="cell"
+							data-cell="5"
+							tabindex="0"
+						>
+							<!-- a mark is going here -->
+							<div
+								class="x-mark mark-large"
+								hidden
+							>
+								x
+							</div>
+							<div
+								class="o-mark mark-large"
+								hidden
+							>
+								o
+							</div>
+						</div>
+						<div
+							class="cell"
+							data-cell="6"
+							tabindex="0"
+						>
+							<!-- a mark is going here -->
+							<div
+								class="x-mark mark-large"
+								hidden
+							>
+								x
+							</div>
+							<div
+								class="o-mark mark-large"
+								hidden
+							>
+								o
+							</div>
+						</div>
+						<div
+							class="cell"
+							data-cell="7"
+							tabindex="0"
+						>
+							<!-- a mark is going here -->
+							<div
+								class="x-mark mark-large"
+								hidden
+							>
+								x
+							</div>
+							<div
+								class="o-mark mark-large"
+								hidden
+							>
+								o
+							</div>
+						</div>
+						<div
+							class="cell"
+							data-cell="8"
+							tabindex="0"
+						>
+							<!-- a mark is going here -->
+							<div
+								class="x-mark mark-large"
+								hidden
+							>
+								x
+							</div>
+							<div
+								class="o-mark mark-large"
+								hidden
+							>
+								o
+							</div>
+						</div>
+					</div>
+					<div
+						id="game-scores"
+						class="game-scores"
+					>
+						<div class="badge badge-primary score-display">
+							<div class="label">x (you)</div>
+							<div
+								class="score"
+								id="player-x-win-count"
+							>
+								14
+							</div>
+						</div>
+						<div class="badge score-display">
+							<div class="label">ties</div>
+							<div
+								class="score"
+								id="tie-count"
+							>
+								32
+							</div>
+						</div>
+						<div class="badge badge-secondary score-display">
+							<div class="label">o (ai)</div>
+							<div
+								class="score"
+								id="player-o-win-count"
+							>
+								11
+							</div>
+						</div>
+					</div>
+				</main>
+				<dialog
+					closedby="any"
+					id="game-result-dialog"
+					class="game-result-dialog"
+					data-winner="player-x"
+				>
+					<p class="dialog-head">YOU WON!</p>
+					<div class="dialog-body">
+						<p class="declare-winner">
+							<span class="mark-wrapper">
+								<span
+									class="x-mark"
+									hidden
+								>
+									x
+								</span>
+								<span
+									class="o-mark"
+									hidden
+								>
+									o
+								</span>
+							</span>
+							takes the round
+						</p>
+
+						<button
+							commandfor="game-result-dialog"
+							command="close"
+						>
+							Quit
+						</button>
+						<button class="btn btn-secondary btn-next">next round</button>
+					</div>
+				</dialog>
+			</div>
+		</template>
+
+		<div id="app"></div>
+	</body>
 </html>

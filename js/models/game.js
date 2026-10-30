@@ -8,6 +8,7 @@ export default function createGame(playerOne, playerTwo) {
 	const score = createScore();
 	let errorMessage = "";
 	let winner = null;
+	let winningCells = [];
 	let draw = false;
 	let gameCount = 0;
 
@@ -101,6 +102,7 @@ export default function createGame(playerOne, playerTwo) {
 		const result = checkResult();
 		if (result.winner) {
 			winner = currentPlayer;
+			winningCells = result.winner.winningCells;
 			updateScores();
 		} else if (result.draw) {
 			draw = true;

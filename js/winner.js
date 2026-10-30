@@ -14,7 +14,7 @@ export const WIN_LINES = [
 export function getWinner(board) {
 	for (const [a, b, c] of WIN_LINES) {
 		if (board[a] !== EMPTY && board[a] === board[b] && board[a] === board[c]) {
-			return board[a];
+			return { mark: board[a], winningCells: [a, b, c] };
 		}
 	}
 	return null;

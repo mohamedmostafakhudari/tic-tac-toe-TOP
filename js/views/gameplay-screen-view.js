@@ -38,6 +38,13 @@ export class GameplayScreenView {
 		cells.forEach(function (cell) {
 			cell.querySelector(".x-mark").hidden = board[+cell.dataset.cell] !== "x";
 			cell.querySelector(".o-mark").hidden = board[+cell.dataset.cell] !== "o";
+			if (
+				winner &&
+				winningCells.length &&
+				winningCells.includes(+cell.dataset.cell)
+			) {
+				cell.classList.add("win-cell");
+			}
 		});
 
 		const playerXWinCount = fragment.querySelector("#player-x-win-count");

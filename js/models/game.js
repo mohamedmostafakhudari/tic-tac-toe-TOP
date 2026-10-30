@@ -122,12 +122,9 @@ export default function createGame(playerOne, playerTwo) {
 				name: winner.getName(),
 				mark: winner.getMark(),
 			},
+			winningCells,
 			draw,
-			scores: {
-				playerXScore: score.playerXScore,
-				playerOScore: score.playerOScore,
-				ties: score.ties,
-			},
+			scores: score.getScores(),
 			error: errorMessage,
 		};
 	}

@@ -9,6 +9,10 @@ export default function createScore() {
 		ties = 0;
 	}
 
+	function getScores() {
+		return { playerXScore, playerOScore, ties };
+	}
+
 	function incrementPlayerXScore() {
 		playerXScore += 1;
 	}
@@ -22,9 +26,7 @@ export default function createScore() {
 	}
 
 	return {
-		playerXScore,
-		playerOScore,
-		ties,
+		getScores,
 		reset,
 		incrementPlayerXScore,
 		incrementPlayerOScore,

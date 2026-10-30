@@ -55,6 +55,9 @@ export default function createGame(playerOne, playerTwo) {
 		winningCells = [];
 		draw = false;
 		gameCount = 0;
+
+		// it's always the player with mark X that got to start the game
+		currentPlayer = playerOne.getMark() === MARKS.X ? playerOne : playerTwo;
 	}
 
 	function checkResult() {
@@ -167,10 +170,6 @@ export default function createGame(playerOne, playerTwo) {
 	}
 	function startANewGame() {
 		resetState();
-
-		// it's always the player with mark X that got to start the game
-		currentPlayer = playerOne.getMark() === MARKS.X ? playerOne : playerTwo;
-
 		if (currentPlayer.isComputer) {
 			playTurn(pickRandomPosition());
 		}

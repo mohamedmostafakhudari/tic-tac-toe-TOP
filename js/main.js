@@ -32,6 +32,7 @@ class GameController {
 
 		this.gameplayScreenView.bindPlaceMark(this.handlePlaceMark.bind(this));
 		this.gameplayScreenView.bindNextRound(this.handleNextRound.bind(this));
+		this.gameplayScreenView.bindRestartGame(this.handleRestartGame.bind(this));
 		this.gameplayScreenView.render(state);
 	}
 
@@ -43,6 +44,12 @@ class GameController {
 	handleNextRound() {
 		const state = this.game.nextRound();
 		this.gameplayScreenView.render(state);
+	}
+
+	handleRestartGame() {
+		this.gameplayScreenView.destroy();
+		this.setupScreenView.bindSubmit(this.handleSetupSubmit.bind(this));
+		this.setupScreenView.render();
 	}
 
 	init() {

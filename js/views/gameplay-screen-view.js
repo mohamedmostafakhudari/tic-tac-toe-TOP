@@ -4,10 +4,16 @@ export class GameplayScreenView {
 		this.container = containerElement;
 		this.template = template;
 		this.gameResultDialog = null;
-		this.abortController = new AbortController();
+		this.abortController = null;
 	}
 
 	bindPlaceMark(callback) {
+		if (this.abortController === null) {
+			// this line is important because abortController is a single-use object so we need to re-instantiate it to be able to bind listeners again after destroy when the controller decides to show this screen again
+
+			this.abortController = new AbortController();
+		}
+
 		this.container.addEventListener(
 			"click",
 			(e) => {
@@ -20,6 +26,10 @@ export class GameplayScreenView {
 	}
 
 	bindNextRound(callback) {
+		if (this.abortController === null) {
+			this.abortController = new AbortController();
+		}
+
 		this.container.addEventListener(
 			"click",
 			(e) => {
@@ -30,8 +40,27 @@ export class GameplayScreenView {
 			{ signal: this.abortController.signal },
 		);
 	}
+
+	bindRestartGame(callback) {
+		if (this.abortController === null) {
+			this.abortController = new AbortController();
+		}
+
+		this.container.addEventListener(
+			"click",
+			(e) => {
+				const restartBtn = e.target.closest(".restart-btn");
+				if (!restartBtn || !this.container.contains(restartBtn)) return;
+				callback();
+			},
+			{
+				signal: this.abortController.signal,
+			},
+		);
+	}
 	destroy() {
-		this.abortController.abort(); // removes every listener, any event type
+		this.abortController?.abort(); // removes every listener, any event type
+		this.abortController = null;
 		this.container.innerHTML = "";
 	}
 

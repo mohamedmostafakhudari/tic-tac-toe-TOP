@@ -1,66 +1,114 @@
-# Tic Tac Toe (CLI Version)
+# ❌⭕ Tic Tac Toe (Web Edition)
 
-A command-line implementation of the classic Tic Tac Toe game, built as part of [The Odin Project](https://www.theodinproject.com/) JavaScript curriculum.
+A clean, modular, and responsive web implementation of the classic Tic Tac Toe game. Built using vanilla JavaScript, modern CSS architecture, and ES Modules as part of [The Odin Project](https://www.theodinproject.com/) curriculum.
 
-This version focuses on clean code structure, Object-Oriented Programming (OOP) concepts, module separation, and pure logic validation before introducing a graphical user interface (GUI).
+## 🚀 Demo & Deployment
+
+- **Live Demo:** Hosted on GitHub Pages _(https://mohamedmostafakhudari.github.io/tic-tac-toe-TOP/)_
+- **Development Environment:** Requires an HTTP server environment (e.g., VS Code Live Server) to support ES Module imports (`file://` protocol is not supported).
 
 ---
 
-## 🚀 Features
+## ✨ Features
 
-- **Game Modes:** Play against another human locally (Player vs. Player) or against a computer opponent (Player vs. AI).
-- **Interactive Terminal Board:** Dynamically prints an indexed board grid ($0$ through $8$) so players can easily pick available moves.
-- **Input Validation:** Prevents invalid inputs or moves on already-occupied cells without breaking the game loop.
-- **Zero External Dependencies:** Built entirely with standard Node.js native packages.
+- **Multiple Game Modes:**
+  - **Player vs. Player (PvP):** Local two-player mode.
+  - **Player vs. AI:** Single-player mode against a random-choice AI opponent.
+- **Custom Setup Screen:** Customize game mode and pick marks/symbols before starting a match.
+- **Persistent Scoreboard:** Tracks wins for Player 1, Player 2 / AI, and total ties across rounds.
+- **Interactive UI:** Smooth transitions between setup screen and gameplay view, complete with interactive icons and reset controls.
+- **Input & State Safeguards:** Strict validation prevents overwriting selected cells or triggering out-of-turn moves.
 
 ---
 
 ## 🛠️ Architecture & Design Patterns
 
-The project heavily leverages modern JavaScript patterns, closures, and encapsulation principles:
+The project follows a modified **Model-View-Controller (MVC)** architectural pattern using modern JavaScript (ES Modules), Factory Functions, and encapsulation:
 
-- **Factory Functions & Closures:** Utilized for `Game`, `GameBoard`, and `Player` models. This allows factory functions to be cleanly exported while keeping state variables private via lexical scoping.
-- **Modular Design:**
-  - `main.js`: Handles the Command-Line Interface (CLI) input/output loop using `node:readline/promises` and `node:process`.
-  - `gameConfig.js`: Stores central game-wide constants (e.g., `BOARD_SIZE`).
-  - `winner.js`: Contains pure, deterministic functions (`getWinner`, draw checks, and `WINNING_LINES`) separated from the game loop to facilitate easy unit testing and state validation.
+### 🏛️ Model Layer (`js/models/`)
 
----
+- **`gameboard.js`**: Manages internal board state array, cell marking, and grid resetting.
+- **`game.js`**: Handles turn swapping, move validation, and game loop orchestration.
+- **`player.js`**: Represents player state (name, symbol, AI vs Human flag).
+- **`score.js`**: Manages win/loss/tie tallying across multiple matches.
 
-## 📦 Prerequisites
+### 👁️ View Layer (`js/views/`)
 
-- **Node.js** (v14+ recommended for native `node:readline/promises` support)
+- **`setup-screen-view.js`**: Controls the configuration UI where players pick modes and symbols.
+- **`gameplay-screen-view.js`**: Handles rendering grid updates, active player indicators, match outcome modal/overlays, and live score displays.
 
----
+### 🎮 Controller Layer (`js/main.js`)
 
-## 🎮 How to Run
+- **`GameController`**: Acts as the central orchestrator connecting the DOM events from the View components with the underlying Model state logic.
 
-1. Clone or navigate to the repository directory.
-2. Run the main entry point:
+### ⚡ Utility Modules
 
-```bash
-node main.js
-```
+- **`winner.js`**: Contains pure, deterministic functions (`getWinner`, draw checks, and `WINNING_LINES`) separated from DOM operations for easy testing (`tests.js`).
+- **`gameConfig.js`**: Holds global configuration metrics (e.g., board size, marker configurations).
 
 ---
 
-## 🖥️ Example Gameplay
+## 🎨 CSS Architecture
 
-```text
-Pick a position to play from 0 to 8: 5
+Styles are organized using a clean modular approach:
 
-|  o  |  1  |  x  |
-|  x  |  4  |  o  |
-|  6  |  x  |  8  |
-```
+- `reset.css`: Modern CSS reset.
+- `global.css`: Global design tokens, CSS custom properties, and base element styles.
+- `components.css`: Reusable UI component styling (cards, buttons, icons).
+- `utilities.css`: Single-purpose utility classes.
+- `style.css`: Primary stylesheet.
+
+---
+
+## 📦 Getting Started Locally
+
+Because this application uses native JavaScript **ES Modules** (`import` / `export`), running `index.html` directly via `file://` in a web browser will result in CORS issues.
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/your-username/tic-tac-toe.git
+   cd tic-tac-toe
+   ```
+
+2. **Serve the project over HTTP:**
+   - **Using VS Code:** Right-click `index.html` and select **"Open with Live Server"**.
+   - **Using Node.js:**
+     ```bash
+     npx http-server .
+     ```
+   - **Using Python:**
+     ```bash
+     python3 -m http.server 8000
+     ```
+
+3. Open your browser and navigate to `http://localhost:8000` (or the port specified by your local server).
 
 ---
 
 ## 📂 Project Structure
 
-```text
-├── main.js        # CLI interface & game execution loop
-├── gameConfig.js  # Global configuration constants
-├── winner.js      # Pure functions for win/draw detection
-└── models/        # Factory functions (Game, GameBoard, Player)
+```
+├── index.html
+├── README.md
+├── css/
+│   ├── reset.css
+│   ├── global.css
+│   ├── components.css
+│   ├── utilities.css
+│   └── style.css
+├── js/
+│   ├── main.js                  # Entry point (GameController setup)
+│   ├── gameConfig.js            # Global configuration parameters
+│   ├── winner.js                # Pure logic for win & draw checks
+│   ├── tests.js                 # Verification/test script
+│   ├── models/                  # Domain logic entities
+│   │   ├── gameboard.js
+│   │   ├── game.js
+│   │   ├── player.js
+│   │   └── score.js
+│   └── views/                   # UI DOM renderers & event listeners
+│       ├── setup-screen-view.js
+│       └── gameplay-screen-view.js
+└── assets/                      # SVG icons and visual assets
 ```
